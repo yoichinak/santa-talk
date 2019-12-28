@@ -11,6 +11,10 @@ namespace SantaTalk
         {
             SendLetterCommand = new Command(async () =>
             {
+                // Avoid blank result by blank letter
+                if (string.IsNullOrWhiteSpace(letterText))
+                    return;
+
                 await Application.Current.MainPage.Navigation.PushAsync(new ResultsPage(KidsName, LetterText));
             });
         }
