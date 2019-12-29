@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using MvvmHelpers;
 using Xamarin.Forms;
@@ -11,12 +12,14 @@ namespace SantaTalk
         {
             SendLetterCommand = new Command(async () =>
             {
-                // Avoid blank result by blank letter
-                if (string.IsNullOrWhiteSpace(letterText))
-                    return;
-
                 await Application.Current.MainPage.Navigation.PushAsync(new ResultsPage(KidsName, LetterText));
+            }, () =>
+            {
+                // Avoid blank result by blank letter.
+                return !string.IsNullOrWhiteSpace(LetterText);
             });
+
+            PropertyChanged += (object sender, PropertyChangedEventArgs e) => (SendLetterCommand as Command).ChangeCanExecute();
         }
 
         string kidsName;
